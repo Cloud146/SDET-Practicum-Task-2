@@ -1,33 +1,21 @@
 package Tests;
 
-import Helpers.MyResponse;
+import Helpers.Methods;
 import io.qameta.allure.Description;
-import io.qameta.allure.Severity;
-import io.qameta.allure.SeverityLevel;
-import io.restassured.response.Response;
+import io.qameta.allure.Epic;
+import io.qameta.allure.Feature;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import static io.restassured.RestAssured.given;
-import static org.hamcrest.Matchers.contains;
-import static org.hamcrest.Matchers.equalTo;
 
+@Epic("SDET_Practice")
+@Feature("Тестирование API")
+@DisplayName("Получение сущности: GET")
 public class GET_Test extends BaseTest {
     @Test
     @Description("Get entity by id")
     void testGetEntityById() {
-        int id = 1;
-
-        Response response = given()
-                .when()
-                .get("/get/{id}", id);
-
-        response.then()
-                .statusCode(200)
-                .body("title", equalTo("Заголовок сущности"))
-                .body("verified", equalTo(true))
-                .body("addition.additional_info", equalTo("Дополнительные сведения"))
-                .body("addition.additional_number", equalTo(123))
-                .body("important_numbers", contains(42, 87, 15));
-
-        MyResponse myResponse = response.as(MyResponse.class);
+        Methods methods = new Methods();
+        methods.method_Get(58, "Заголовок сущности", true, "Дополнительные сведения",
+                1234, new int[]{42, 87, 15});
     }
 }

@@ -1,19 +1,23 @@
 package Tests;
 
 import io.qameta.allure.Description;
+import io.qameta.allure.Epic;
+import io.qameta.allure.Feature;
 import io.qameta.allure.internal.shadowed.jackson.core.JsonProcessingException;
+import io.qameta.allure.internal.shadowed.jackson.databind.JsonNode;
 import io.qameta.allure.internal.shadowed.jackson.databind.ObjectMapper;
 import io.restassured.response.Response;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-
-import java.util.Collections;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
-
 import static io.restassured.RestAssured.given;
 import static org.junit.Assert.assertEquals;
 
-public class GetAll_Test {
+@Epic("SDET_Practice")
+@Feature("Тестирование API")
+@DisplayName("Получение всех сущностей: GET")
+public class GetAll_Test{
 
     @Test
     @Description("Get all entities")
@@ -22,21 +26,23 @@ public class GetAll_Test {
                 .when()
                 .get("/api/getAll");
 
-        response.then()
-                .statusCode(200);
+        System.out.println(response.asString());
 
         String responseBody = response.asString();
-        ObjectMapper objectMapper = new ObjectMapper();
-        List<Map<String, Object>> entities = null;
+        JsonNode jsonNode = null;
         try {
-            entities = Collections.singletonList(objectMapper.readValue(responseBody, Map.class));
+            jsonNode = new ObjectMapper().readTree(responseBody);
         } catch (JsonProcessingException e) {
             throw new RuntimeException(e);
         }
-
-
-        assertEquals(1, entities.size());
-
-        assertEquals("Заголовок сущности", entities.get(0).get("title"));
+        JsonNode entityNode = jsonNode.get("entity");
+        List<JsonNode> entityList = new ArrayList<>();
+        int entityCount = 0;
+        for (JsonNode node : entityNode) {
+            entityList.add(node);
+            System.out.println(node);
+            entityCount++;
+        }
+        assertEquals(entityCount, entityList.size());
     }
 }

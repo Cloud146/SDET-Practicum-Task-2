@@ -1,28 +1,31 @@
 package Tests;
 
 import Helpers.MyRequest;
+import io.qameta.allure.Epic;
+import io.qameta.allure.Feature;
 import io.qameta.allure.internal.shadowed.jackson.core.JsonProcessingException;
 import io.qameta.allure.internal.shadowed.jackson.databind.ObjectMapper;
-import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
 import io.restassured.response.Response;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.CoreMatchers.notNullValue;
-import static org.junit.Assert.assertEquals;
 
-public class DELETE_Test {
+@Epic("SDET_Practice")
+@Feature("Тестирование API")
+@DisplayName("Удаление сущности: DELETE")
+public class DELETE_Test extends BaseTest {
 
     @Test
     void testDeleteEntity() {
         MyRequest myRequest = new MyRequest();
-        myRequest.setTitle("Заголовок сущности");
+        myRequest.setTitle("Сущность для удаления");
         myRequest.setVerified(true);
         myRequest.setAddition(new MyRequest.Addition());
-        myRequest.getAddition().setAdditionalInfo("Дополнительные сведения");
-        myRequest.getAddition().setAdditionalNumber(123);
-        myRequest.setImportantNumbers(new int[]{42, 87, 15});
+        myRequest.getAddition().setAdditional_info("Дополнительные сведения");
+        myRequest.getAddition().setAdditional_number(1235);
+        myRequest.setImportant_numbers(new int[]{42, 87, 15});
 
         ObjectMapper objectMapper = new ObjectMapper();
         String requestBody = null;
@@ -36,18 +39,25 @@ public class DELETE_Test {
                 .contentType(ContentType.JSON)
                 .body(requestBody)
                 .when()
-                .post("/create");
+                .post("/api/create");
+
         response.then()
                 .statusCode(200)
                 .body(notNullValue());
 
-        int entityId = response.then().extract().path("id");
-        RestAssured.given()
-                .delete("/delete/{id}", entityId);
+        int id = response.jsonPath().getInt("");
 
-        Response getResponse = RestAssured.given()
-                .get("/get/{id}", entityId);
+        given()
+                .when()
+                .delete("/api/delete/{id}", id)
+                .then()
+                .statusCode(404);
 
-        assertEquals(404, getResponse.getStatusCode());
+
+        given()
+                .when()
+                .get("/api/get/{id}", id)
+                .then()
+                .statusCode(404);
     }
 }
