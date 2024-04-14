@@ -18,3 +18,12 @@
 6. **Дополнительное задание №1:** Реализовать формирование отчетов Allure.
 7. **Дополнительное задание №2:** Реализовать параллельный запуск тестов.
 8. **Дополнительное задание №3:** Реализовать запуск в системе CI/CD.
+
+## Отчёты Allure
+![Screen1](https://github.com/Cloud146/SDET-Practicum-Task-2/blob/master/allureScreens/AllureScreen1.jpg)
+
+![Screen1](https://github.com/Cloud146/SDET-Practicum-Task-2/blob/master/allureScreens/AllureScreen2.jpg)
+
+![Screen1](https://github.com/Cloud146/SDET-Practicum-Task-2/blob/master/allureScreens/AllureScreen3.jpg)
+
+![Screen1](https://github.com/Cloud146/SDET-Practicum-Task-2/blob/master/allureScreens/AllureScreen4.jpg)
